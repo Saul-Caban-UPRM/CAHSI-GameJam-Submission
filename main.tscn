@@ -1,0 +1,183 @@
+[gd_scene load_steps=13 format=3 uid="uid://bayvdlb8r78sq"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_46f0n"]
+[ext_resource type="Texture2D" uid="uid://cxbeprmksi5hl" path="res://assets/IMG_0398.PNG" id="1_fdn32"]
+[ext_resource type="Texture2D" uid="uid://dru4ky32b320v" path="res://assets/ducky_3_spritesheet.png" id="2_l1hnv"]
+[ext_resource type="Texture2D" uid="uid://cbv8n0tqqo2xa" path="res://assets/six sided die.png" id="4_q7x28"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p8cwg"]
+size = Vector2(60.5069, 60.0845)
+
+[sub_resource type="Animation" id="Animation_8dxph"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Duck:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_4u8gf"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Duck:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.166667, 0.766667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ggjjn"]
+_data = {
+"RESET": SubResource("Animation_8dxph"),
+"idle": SubResource("Animation_4u8gf")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gxl6y"]
+radius = 12.0
+
+[sub_resource type="Animation" id="Animation_vjrtv"]
+resource_name = "DiceRoll"
+length = 9.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.266667, 0.9, 1.7, 2.5, 3.33333, 4.23333, 5.1, 5.86667, 6.76667, 7.66667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [12, 19, 26, 33, 40, 47, 48, 55, 62, 69]
+}
+
+[sub_resource type="Animation" id="Animation_s2u8j"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [12]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m25u3"]
+_data = {
+"DiceRoll": SubResource("Animation_vjrtv"),
+"RESET": SubResource("Animation_s2u8j")
+}
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_46f0n")
+
+[node name="Board" type="Sprite2D" parent="."]
+texture_filter = 1
+texture_repeat = 1
+position = Vector2(609, 360.913)
+scale = Vector2(1.10876, 1.11811)
+texture = ExtResource("1_fdn32")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Board"]
+position = Vector2(-290.905, -288.436)
+shape = SubResource("RectangleShape2D_p8cwg")
+
+[node name="Duck" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(288, 680)
+scale = Vector2(2, 2)
+texture = ExtResource("2_l1hnv")
+hframes = 6
+vframes = 4
+
+[node name="DuckAnimation" type="AnimationPlayer" parent="Duck"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_ggjjn")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Duck"]
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_gxl6y")
+
+[node name="MoveTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="Dice" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(608, 360)
+scale = Vector2(4, 4)
+texture = ExtResource("4_q7x28")
+hframes = 6
+vframes = 15
+frame = 12
+
+[node name="DiceAnimation" type="AnimationPlayer" parent="Dice"]
+libraries = {
+"": SubResource("AnimationLibrary_m25u3")
+}
+speed_scale = 5.0
+
+[node name="Dice1" type="Sprite2D" parent="Dice"]
+texture = ExtResource("4_q7x28")
+hframes = 6
+vframes = 15
+frame = 12
+
+[node name="Dice2" type="Sprite2D" parent="Dice"]
+texture = ExtResource("4_q7x28")
+hframes = 6
+vframes = 15
+frame = 19
+
+[node name="Dice3" type="Sprite2D" parent="Dice"]
+texture = ExtResource("4_q7x28")
+hframes = 6
+vframes = 15
+frame = 26
+
+[node name="Dice4" type="Sprite2D" parent="Dice"]
+texture = ExtResource("4_q7x28")
+hframes = 6
+vframes = 15
+frame = 33
+
+[node name="Dice5" type="Sprite2D" parent="Dice"]
+texture = ExtResource("4_q7x28")
+hframes = 6
+vframes = 15
+frame = 40
+
+[node name="Dice6" type="Sprite2D" parent="Dice"]
+texture = ExtResource("4_q7x28")
+hframes = 6
+vframes = 15
+frame = 47
+
+[node name="DiceTimer" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="DiceRolledTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]
+[connection signal="timeout" from="DiceTimer" to="." method="_on_dice_timer_timeout"]
+[connection signal="timeout" from="DiceRolledTimer" to="." method="_on_dice_rolled_timer_timeout"]
