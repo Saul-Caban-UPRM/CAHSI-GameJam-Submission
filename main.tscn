@@ -1,52 +1,16 @@
-[gd_scene load_steps=13 format=3 uid="uid://bayvdlb8r78sq"]
+[gd_scene load_steps=24 format=3 uid="uid://bayvdlb8r78sq"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_46f0n"]
 [ext_resource type="Texture2D" uid="uid://cxbeprmksi5hl" path="res://assets/IMG_0398.PNG" id="1_fdn32"]
 [ext_resource type="Texture2D" uid="uid://dru4ky32b320v" path="res://assets/ducky_3_spritesheet.png" id="2_l1hnv"]
 [ext_resource type="Texture2D" uid="uid://cbv8n0tqqo2xa" path="res://assets/six sided die.png" id="4_q7x28"]
+[ext_resource type="Texture2D" uid="uid://bv26mta05vmqy" path="res://assets/SpriteSheet.png" id="5_65ski"]
+[ext_resource type="Texture2D" uid="uid://b1fxcf0aeveum" path="res://egg sprite sheet.png" id="6_f5h4h"]
+[ext_resource type="Texture2D" uid="uid://c3tcvxbbpucd0" path="res://assets/Explosionspritesheet.png" id="7_g3she"]
+[ext_resource type="Texture2D" uid="uid://d5a8g54chabu" path="res://assets/winner.png" id="8_pe0su"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_p8cwg"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x5py6"]
 size = Vector2(60.5069, 60.0845)
-
-[sub_resource type="Animation" id="Animation_8dxph"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Duck:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
-[sub_resource type="Animation" id="Animation_4u8gf"]
-resource_name = "idle"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Duck:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.166667, 0.766667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [0, 1]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ggjjn"]
-_data = {
-"RESET": SubResource("Animation_8dxph"),
-"idle": SubResource("Animation_4u8gf")
-}
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_gxl6y"]
-radius = 12.0
 
 [sub_resource type="Animation" id="Animation_vjrtv"]
 resource_name = "DiceRoll"
@@ -86,6 +50,148 @@ _data = {
 "RESET": SubResource("Animation_s2u8j")
 }
 
+[sub_resource type="Animation" id="Animation_bmxbt"]
+resource_name = "ExplosingEgg"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Egg:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1, 0.266667, 0.433333, 0.633333, 0.833333, 1.03333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [52, 53, 54, 55, 56, 57]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Explosion:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.3, 1.43333, 1.53333, 1.63333, 1.73333, 1.83333, 1.86667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6]
+}
+
+[sub_resource type="Animation" id="Animation_wmvva"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Egg:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [52]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Explosion:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5v6dm"]
+_data = {
+"ExplosingEgg": SubResource("Animation_bmxbt"),
+"RESET": SubResource("Animation_wmvva")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_d387a"]
+
+[sub_resource type="Animation" id="Animation_8ofre"]
+resource_name = "WalkRight"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 0.5, 0.933333, 1.73333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [3, 91, 92, 2]
+}
+
+[sub_resource type="Animation" id="Animation_aejw5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nn8pv"]
+_data = {
+"RESET": SubResource("Animation_aejw5"),
+"WalkRight": SubResource("Animation_8ofre")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gxl6y"]
+radius = 12.0
+
+[sub_resource type="Animation" id="Animation_8dxph"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Duck/DuckSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_4u8gf"]
+resource_name = "WalkRight"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Duck/DuckSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.166667, 0.766667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ggjjn"]
+_data = {
+"RESET": SubResource("Animation_8dxph"),
+"WalkRight": SubResource("Animation_4u8gf")
+}
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_46f0n")
 
@@ -96,27 +202,11 @@ position = Vector2(609, 360.913)
 scale = Vector2(1.10876, 1.11811)
 texture = ExtResource("1_fdn32")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Board"]
+[node name="WinningBlock" type="Area2D" parent="Board"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Board/WinningBlock"]
 position = Vector2(-290.905, -288.436)
-shape = SubResource("RectangleShape2D_p8cwg")
-
-[node name="Duck" type="Sprite2D" parent="."]
-texture_filter = 1
-position = Vector2(288, 680)
-scale = Vector2(2, 2)
-texture = ExtResource("2_l1hnv")
-hframes = 6
-vframes = 4
-
-[node name="DuckAnimation" type="AnimationPlayer" parent="Duck"]
-root_node = NodePath("../..")
-libraries = {
-"": SubResource("AnimationLibrary_ggjjn")
-}
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Duck"]
-position = Vector2(0, 4)
-shape = SubResource("CircleShape2D_gxl6y")
+shape = SubResource("RectangleShape2D_x5py6")
 
 [node name="MoveTimer" type="Timer" parent="."]
 wait_time = 0.5
@@ -178,6 +268,79 @@ wait_time = 3.0
 
 [node name="DiceRolledTimer" type="Timer" parent="."]
 
+[node name="ExplosiveEgg" type="Node2D" parent="."]
+position = Vector2(0, -8)
+
+[node name="Egg" type="Sprite2D" parent="ExplosiveEgg"]
+texture_filter = 1
+position = Vector2(129.669, 605.602)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("6_f5h4h")
+hframes = 13
+vframes = 5
+frame = 52
+
+[node name="Explosion" type="Sprite2D" parent="ExplosiveEgg"]
+texture_filter = 1
+position = Vector2(129.669, 605.602)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("7_g3she")
+hframes = 7
+
+[node name="ExplosiveEggAnimation" type="AnimationPlayer" parent="ExplosiveEgg"]
+libraries = {
+"": SubResource("AnimationLibrary_5v6dm")
+}
+
+[node name="Win" type="Sprite2D" parent="."]
+position = Vector2(611.149, 333.625)
+scale = Vector2(0.328458, 0.328457)
+texture = ExtResource("8_pe0su")
+
+[node name="Goose" type="CharacterBody2D" parent="."]
+position = Vector2(288, 664)
+scale = Vector2(2.75, 2.75)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Goose"]
+position = Vector2(-1.52588e-05, 8.72726)
+scale = Vector2(1, 1)
+shape = SubResource("CircleShape2D_d387a")
+
+[node name="GooseSprite" type="Sprite2D" parent="Goose"]
+texture_filter = 1
+scale = Vector2(1, 1)
+texture = ExtResource("5_65ski")
+hframes = 15
+vframes = 17
+
+[node name="GooseAnimation" type="AnimationPlayer" parent="Goose"]
+root_node = NodePath("../GooseSprite")
+libraries = {
+"": SubResource("AnimationLibrary_nn8pv")
+}
+speed_scale = 3.0
+
+[node name="Duck" type="CharacterBody2D" parent="."]
+position = Vector2(288, 680)
+scale = Vector2(2, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Duck"]
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_gxl6y")
+
+[node name="DuckSprite" type="Sprite2D" parent="Duck"]
+texture_filter = 1
+texture = ExtResource("2_l1hnv")
+hframes = 6
+vframes = 4
+
+[node name="DuckAnimation" type="AnimationPlayer" parent="Duck"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_ggjjn")
+}
+
+[connection signal="body_entered" from="Board/WinningBlock" to="." method="_on_winning_block_body_entered"]
 [connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]
 [connection signal="timeout" from="DiceTimer" to="." method="_on_dice_timer_timeout"]
 [connection signal="timeout" from="DiceRolledTimer" to="." method="_on_dice_rolled_timer_timeout"]
