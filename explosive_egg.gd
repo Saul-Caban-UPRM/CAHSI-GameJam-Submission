@@ -19,7 +19,8 @@ func _on_egg_hatch_timeout() -> void:
 	$CharacterBody2D/Explosion/ExplosionAnimation.play("Explosion")
 	EggHatchTimer.stop()
 	ExplosionTimer.start()
-
+func EggRespawn()->void:
+	$CharacterBody2D/Egg.show()
 
 func _on_explosion_timer_timeout() -> void:
 	$CharacterBody2D/Explosion.hide()
