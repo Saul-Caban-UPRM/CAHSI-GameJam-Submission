@@ -1,0 +1,125 @@
+[gd_scene load_steps=11 format=3 uid="uid://bct5n7yfce5l4"]
+
+[ext_resource type="Texture2D" uid="uid://b1fxcf0aeveum" path="res://assets/egg sprite sheet.png" id="1_5s8tc"]
+[ext_resource type="Script" path="res://explosive_egg.gd" id="1_ww8yi"]
+[ext_resource type="Texture2D" uid="uid://c3tcvxbbpucd0" path="res://assets/Explosionspritesheet.png" id="2_irt62"]
+
+[sub_resource type="Animation" id="Animation_yhd8j"]
+resource_name = "EggHatching"
+length = 2.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.166667, 0.5, 0.866667, 1.2, 1.56667, 1.93333, 2.33333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [52, 53, 54, 55, 56, 57, 58]
+}
+
+[sub_resource type="Animation" id="Animation_hi206"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [52]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7wn68"]
+_data = {
+"EggHatching": SubResource("Animation_yhd8j"),
+"RESET": SubResource("Animation_hi206")
+}
+
+[sub_resource type="Animation" id="Animation_4eish"]
+resource_name = "Explosion"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.166667, 0.566667, 0.966667, 1.36667, 1.73333, 2.13333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_mlbo2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qrvym"]
+_data = {
+"Explosion": SubResource("Animation_4eish"),
+"RESET": SubResource("Animation_mlbo2")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7hsun"]
+size = Vector2(18, 17)
+
+[node name="ExplosiveEgg" type="Node2D"]
+script = ExtResource("1_ww8yi")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+
+[node name="Egg" type="Sprite2D" parent="CharacterBody2D"]
+texture_filter = 1
+texture = ExtResource("1_5s8tc")
+hframes = 13
+vframes = 5
+frame = 52
+
+[node name="EggAnimation" type="AnimationPlayer" parent="CharacterBody2D/Egg"]
+libraries = {
+"": SubResource("AnimationLibrary_7wn68")
+}
+speed_scale = 2.05
+
+[node name="Explosion" type="Sprite2D" parent="CharacterBody2D"]
+texture_filter = 1
+texture = ExtResource("2_irt62")
+hframes = 7
+
+[node name="ExplosionAnimation" type="AnimationPlayer" parent="CharacterBody2D/Explosion"]
+libraries = {
+"": SubResource("AnimationLibrary_qrvym")
+}
+speed_scale = 3.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(0, -8.5)
+shape = SubResource("RectangleShape2D_7hsun")
+
+[node name="EggHatch" type="Timer" parent="CharacterBody2D"]
+one_shot = true
+
+[node name="ExplosionTimer" type="Timer" parent="CharacterBody2D"]
+wait_time = 0.9
+one_shot = true
+
+[connection signal="timeout" from="CharacterBody2D/EggHatch" to="." method="_on_egg_hatch_timeout"]
+[connection signal="timeout" from="CharacterBody2D/ExplosionTimer" to="." method="_on_explosion_timer_timeout"]

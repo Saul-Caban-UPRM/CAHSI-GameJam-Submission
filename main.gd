@@ -113,6 +113,7 @@ func switch_turns():
 	is_duck_turn = !is_duck_turn
 	
 func _ready():
+
 	$Dice.hide()
 	$Win.hide()
 	$Duck/DuckAnimation.play("WalkRight")
