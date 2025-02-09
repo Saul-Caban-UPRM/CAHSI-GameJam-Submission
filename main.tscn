@@ -281,7 +281,10 @@ scale = Vector2(1.2, 1.2)
 
 [node name="HomePage" parent="." instance=ExtResource("8_mnysq")]
 
+[node name="BackWardsTimer" type="Timer" parent="."]
+
 [connection signal="body_entered" from="Board/WinningBlock" to="." method="_on_winning_block_body_entered"]
 [connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]
 [connection signal="timeout" from="DiceTimer" to="." method="_on_dice_timer_timeout"]
 [connection signal="timeout" from="DiceRolledTimer" to="." method="_on_dice_rolled_timer_timeout"]
+[connection signal="timeout" from="BackWardsTimer" to="." method="_on_back_wards_timer_timeout"]

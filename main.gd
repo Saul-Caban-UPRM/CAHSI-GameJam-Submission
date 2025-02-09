@@ -5,16 +5,22 @@ var duck_column = 0
 var goose_row = 0
 var goose_column =0
 
+var duck_is_moving = false
+var goose_is_moving = false
+
 var duck_steps_remaining = 0  # Number of steps left to move
 var goose_steps_remaining = 0
 
 var dice_result = 0  # Stores dice roll result
 var is_moving = false
 var is_duck_turn = true
+var exploded_eggs = {}
+var foward = true
 
 @onready var move_timer = $MoveTimer
 @onready var dice_timer = $DiceTimer
 @onready var DiceRolledTimer = $DiceRolledTimer
+@onready var BackwardsTimer = $BackWardsTimer
 
 func roll_dice() -> int:
 	return randi_range(1, 6)
@@ -34,30 +40,46 @@ func move_character_y_animated(animal: Node2D,amount: float, duration: float = 0
 
 func update_character_position(animal: Node2D, steps_remaining: int, row: int, column: int) -> Dictionary:
 	if steps_remaining > 0:
-		if row < 9 && column%2 ==0:
-			if column %2 != 0:
-				move_character_y_animated(animal,71,0.5)
-				column+=1
-			else:
-				move_character_x_animated(animal,71,0.5)
+		duck_is_moving = true
+		goose_is_moving = true
+		if not foward:
+			if row ==9 && column%2 != 0:
+				move_character_y_animated(animal, -71, 0.5)
+				column -=1
+			elif column % 2 == 0:  # Going left
+				move_character_x_animated(animal, -71, 0.5)
+				row -= 1
+			else:  # Going right
+				move_character_x_animated(animal, 71, 0.5)
 				row += 1
+		if foward:
+			if row < 9 && column%2 ==0:
+				if column %2 != 0:
+					move_character_y_animated(animal,71,0.5)
+					column+=1
+				else:
+					move_character_x_animated(animal,71,0.5)
+					row += 1
 			
-		else:
-			if column %2 == 0 && row == 9:
-				move_character_y_animated(animal,71,0.5)
-				column +=1
-			elif column%2 != 0 && row ==0:
-				move_character_y_animated(animal,71,0.5)
-				column +=1
 			else:
-				move_character_x_animated(animal,-71,0.5)
-				row -=1
+				if column %2 == 0 && row == 9:
+					move_character_y_animated(animal,71,0.5)
+					column +=1
+				elif column%2 != 0 && row ==0:
+					move_character_y_animated(animal,71,0.5)
+					column +=1
+				else:
+					move_character_x_animated(animal,-71,0.5)
+					row -=1
 		steps_remaining -=1
 		move_timer.start()
 		return {"steps_remaining": steps_remaining, "row": row, "column": column}
 	else:
 		move_timer.stop()
 		is_moving = false
+		duck_is_moving = false
+		goose_is_moving = false
+		foward = true
 		switch_turns()
 		return {"steps_remaining": steps_remaining, "row": row, "column": column}
 func show_dice_roll_result() -> void:
@@ -82,9 +104,7 @@ func show_dice_roll_result() -> void:
 		6:
 			$Dice/Dice6.show()
 	
-
 func _input(event):
-	
 	if event.is_action_pressed("move_right"):
 		start_turn()
 		$Dice/Dice1.hide()
@@ -95,7 +115,6 @@ func _input(event):
 		$Dice/Dice6.hide()
 		
 func start_turn():
-	
 		is_moving = true
 		dice_result = roll_dice()
 		if is_duck_turn:
@@ -108,25 +127,13 @@ func start_turn():
 			$Dice.show()
 			$Dice/DiceAnimation.play("DiceRoll")
 			dice_timer.start()
-
 func switch_turns():
 	is_duck_turn = !is_duck_turn
-	
 func _ready():
-
 	$Dice.hide()
 	$Win.hide()
 	$Duck/DuckAnimation.play("WalkRight")
 	$Goose/GooseAnimation.play("WalkRight")
-	
-	
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 
 func _on_move_timer_timeout() -> void:
 	if is_duck_turn:
@@ -139,10 +146,42 @@ func _on_move_timer_timeout() -> void:
 		goose_steps_remaining = result["steps_remaining"]
 		goose_row = result["row"]
 		goose_column = result["column"]
+	
+	if duck_steps_remaining == 0 or goose_steps_remaining == 0:
+		_on_movement_finished()
+	
+func ExplodeOnTile()-> void:
+# Define the egg positions
+	
+	var egg_positions = {"egg1": Vector2(1, 8),"egg2": Vector2(8, 7),"egg3": Vector2(3, 5),"egg4": Vector2(7, 3),"egg5": Vector2(1, 2),"egg6": Vector2(5, 1)}
+	
+	# Mapping for the corresponding egg nodes
+	var egg_nodes = {"egg1": $EggContainer/ExplosiveEgg5,"egg2": $EggContainer/ExplosiveEgg6,"egg3": $EggContainer/ExplosiveEgg4,"egg4": $EggContainer/ExplosiveEgg3,"egg5": $EggContainer/ExplosiveEgg2,"egg6": $EggContainer/ExplosiveEgg1}
+	
+	for egg_name in egg_positions.keys():
+		var pos = egg_positions[egg_name]
 
+		
+		if (duck_row == pos.x and duck_column == pos.y and not duck_is_moving) or (goose_row == pos.x and goose_column == pos.y and not goose_is_moving):
+			if not exploded_eggs.get(egg_name, false):  
+				egg_nodes[egg_name].explode()
+				exploded_eggs[egg_name] = true  
+				
+				# Stop forward movement completely
+				move_timer.stop()
+				is_moving = false  
 
+				# Move character back 3 steps
+				foward = false
+				switch_turns()
+				if duck_row == pos.x and duck_column == pos.y:
+					duck_steps_remaining = 3  # Set the number of backward steps
+					_on_back_wards_timer_timeout()
+				elif goose_row == pos.x and goose_column == pos.y:
+					goose_steps_remaining = 3
+					_on_back_wards_timer_timeout()
 
-
+		
 func _on_dice_timer_timeout() -> void:
 	 # Display the dice result
 	$Dice/DiceAnimation.stop()
@@ -159,6 +198,9 @@ func _on_dice_timer_timeout() -> void:
 		goose_row = result["row"]
 		goose_column = result["column"]
 	dice_timer.stop()
+	move_timer.start()
+	
+
 
 
 func _on_dice_rolled_timer_timeout() -> void:
@@ -169,12 +211,35 @@ func _on_dice_rolled_timer_timeout() -> void:
 func _on_movement_finished() -> void:
 	if is_duck_turn:
 		if duck_steps_remaining ==0:
-			is_moving = false
+			ExplodeOnTile()
+			
+			
 	else:
 		if goose_steps_remaining == 0:
-			is_moving = false
+			ExplodeOnTile()
+	
 			
 func _on_winning_block_body_entered(body: Node2D) -> void:
 	if body == $Duck or body == $Goose:
 		print("Duck has reached goal!")
 		$Win.show()
+
+
+func _on_back_wards_timer_timeout() -> void:
+	# Handle backward movement for the duck
+	
+	if is_duck_turn:
+		var result = update_character_position($Duck, duck_steps_remaining, duck_row, duck_column)
+		duck_steps_remaining = result["steps_remaining"]
+		duck_row = result["row"]
+		duck_column = result["column"]
+
+	# Handle backward movement for the goose
+	elif not is_duck_turn:
+		
+		var result = update_character_position($Goose, goose_steps_remaining, goose_row, goose_column)
+		goose_steps_remaining = result["steps_remaining"]
+		goose_row = result["row"]
+		goose_column = result["column"]
+		
+	
