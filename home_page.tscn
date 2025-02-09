@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://vl5dx33hulix"]
+[gd_scene load_steps=7 format=3 uid="uid://vl5dx33hulix"]
 
 [ext_resource type="Script" path="res://home_page.gd" id="1_bnxrp"]
 [ext_resource type="Texture2D" uid="uid://cy1oqlnk8bl5i" path="res://assets/WhatsApp Image 2025-02-08 at 8.57.56 PM.jpeg" id="1_gbqnn"]
 [ext_resource type="FontFile" uid="uid://ibbb6nbdubw0" path="res://assets/raster-forge-font/RasterForgeRegular-JpBgm.ttf" id="2_gdmb2"]
+[ext_resource type="AudioStream" uid="uid://ch4j2kdyrb5kc" path="res://assets/raster-forge-font/misc/youtube_izfdUfSiaLc_audio.mp3" id="4_am1m7"]
+[ext_resource type="AudioStream" uid="uid://dt18aqq1skm2y" path="res://assets/raster-forge-font/misc/explosion.mp3" id="5_a4bly"]
 
 [sub_resource type="Theme" id="Theme_nns31"]
 default_font = ExtResource("2_gdmb2")
@@ -51,5 +53,13 @@ grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_gdmb2")
 theme_override_font_sizes/font_size = 76
 text = "Duck's & Geese"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="TextureRect"]
+stream = ExtResource("4_am1m7")
+volume_db = -5.0
+parameters/looping = true
+
+[node name="AudioStreamPlayer2D2" type="AudioStreamPlayer2D" parent="TextureRect"]
+stream = ExtResource("5_a4bly")
 
 [connection signal="pressed" from="TextureRect/StartGame" to="." method="_on_start_game_pressed"]
