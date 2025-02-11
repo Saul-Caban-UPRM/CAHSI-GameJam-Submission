@@ -1,8 +1,9 @@
-[gd_scene load_steps=23 format=3 uid="uid://bayvdlb8r78sq"]
+[gd_scene load_steps=24 format=3 uid="uid://bayvdlb8r78sq"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_46f0n"]
 [ext_resource type="Texture2D" uid="uid://cxbeprmksi5hl" path="res://assets/IMG_0398.PNG" id="1_fdn32"]
 [ext_resource type="Texture2D" uid="uid://dru4ky32b320v" path="res://assets/ducky_3_spritesheet.png" id="2_l1hnv"]
+[ext_resource type="Texture2D" uid="uid://dbfut38786tit" path="res://icon.svg" id="3_vu14w"]
 [ext_resource type="Texture2D" uid="uid://cbv8n0tqqo2xa" path="res://assets/six sided die.png" id="4_q7x28"]
 [ext_resource type="Texture2D" uid="uid://bv26mta05vmqy" path="res://assets/SpriteSheet.png" id="5_65ski"]
 [ext_resource type="Texture2D" uid="uid://cwyt57r5vxgj7" path="res://assets/raster-forge-font/misc/loser.png" id="5_sydhi"]
@@ -148,6 +149,12 @@ texture = ExtResource("1_fdn32")
 position = Vector2(-290.905, -288.436)
 shape = SubResource("RectangleShape2D_x5py6")
 
+[node name="TouchScreenButton" type="TouchScreenButton" parent="Board"]
+position = Vector2(-549.262, 206.676)
+scale = Vector2(0.901908, 0.894366)
+texture_normal = ExtResource("3_vu14w")
+action = "move_right"
+
 [node name="MoveTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
@@ -292,7 +299,10 @@ offset_right = 256.0
 offset_bottom = 720.0
 theme_override_fonts/font = ExtResource("9_wtuh3")
 text = "Press the space bar 
-to roll your dice."
+to roll your dice.
+
+Or Tap this button 
+below"
 
 [node name="message" type="Label" parent="."]
 offset_left = 968.0
